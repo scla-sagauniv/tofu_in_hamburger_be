@@ -1,0 +1,6 @@
+FROM golang:1.19.2-alpine
+
+WORKDIR /go/app
+COPY ./app .
+
+CMD ["go", "rum", "main.go"]
