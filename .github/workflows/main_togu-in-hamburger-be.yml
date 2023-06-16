@@ -30,7 +30,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: crtofuinhamburger.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_c70d173f4ee04b648964992c94e56abc }}/tofuinhamburgerbe:${{ github.sha }}
+          tags: crtofuinhamburger.azurecr.io/${{secrets.AzureAppService_ContainerUsername_c70d173f4ee04b648964992c94e56abc}}/tofuinhamburgerbe:${{ github.sha }}
           file: ./Dockerfile.prod
 
   deploy:
