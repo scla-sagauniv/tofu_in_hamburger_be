@@ -20,6 +20,8 @@ app/*.out
 # Go workspace file
 app/go.work
 
+app/tmp
+
 docker/db/data
 **/.env
 .vscode
