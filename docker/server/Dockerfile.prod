@@ -3,4 +3,5 @@ FROM golang:1.19.2-alpine
 WORKDIR /go/app
 COPY ./app .
 
+ENV SERVER_PORT 80
 CMD ["go", "run", "main.go"]
