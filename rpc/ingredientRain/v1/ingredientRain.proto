@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package rpc.ingredientRain.v1;
+package rpc.ingredientRain.v1.ingredientService;
 
 import "google/protobuf/timestamp.proto";
 
