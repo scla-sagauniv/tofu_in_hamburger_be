@@ -10,6 +10,8 @@ require (
 	google.golang.org/protobuf v1.30.0
 )
 
+require github.com/golang/protobuf v1.5.3 // indirect
+
 require (
 	github.com/go-sql-driver/mysql v1.7.1
 	golang.org/x/text v0.9.0 // indirect

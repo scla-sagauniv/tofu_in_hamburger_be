@@ -2,11 +2,11 @@ package handler
 
 import (
 	"context"
-	"errors"
 	"log"
 
 	v1 "tofu_in_hamburger_be/gen/rpc/ingredientRain/v1"
 	"tofu_in_hamburger_be/gen/rpc/ingredientRain/v1/ingredientRainv1connect"
+	"tofu_in_hamburger_be/logic"
 
 	"github.com/bufbuild/connect-go"
 	connect_go "github.com/bufbuild/connect-go"
@@ -17,11 +17,28 @@ type RecipeHandler struct {
 }
 
 func (RecipeHandler) CreateRecipesByBatch(ctx context.Context, req *connect_go.Request[v1.CreateRecipesByBatchRequest]) (*connect_go.Response[v1.CreateRecipesByBatchResponse], error) {
-	log.Println("Request headers: ", req)
-	err := errors.New("error")
+	log.Println("Request headers: ", req.Header())
+	var err error
+	err = logic.DeleteAllRecipe()
+	if err != nil {
+		errMsg := err.Error()
+		res := connect.NewResponse(&v1.CreateRecipesByBatchResponse{
+			Error: &errMsg,
+		})
+		return res, nil
+	}
+	err = logic.BulkInsertToRecipe(req.Msg.Recipes)
+	if err != nil {
+		errMsg := err.Error()
+		res := connect.NewResponse(&v1.CreateRecipesByBatchResponse{
+			Error: &errMsg,
+		})
+		return res, nil
+	}
+
 	res := connect.NewResponse(&v1.CreateRecipesByBatchResponse{
-		Error: err.Error(),
+		Error: nil,
 	})
-	res.Header().Set("Greet-Version", "v1")
+
 	return res, nil
 }
