@@ -15,6 +15,8 @@ type IngredientHandler struct {
 	ingredientRainv1connect.UnimplementedIngredientServiceHandler
 }
 
+var streams []*connect_go.ServerStream[v1.StreamIngredientResponse]
+
 func (IngredientHandler) GetIngredientList(ctx context.Context, req *connect_go.Request[v1.GetIngredientListRequest]) (*connect_go.Response[v1.GetIngredientListResponse], error) {
 	log.Println("Request headers: ", req.Header())
 	ingredients, err := logic.SelectAllIngredient()
@@ -25,4 +27,13 @@ func (IngredientHandler) GetIngredientList(ctx context.Context, req *connect_go.
 		Ingredients: ingredients,
 	})
 	return res, nil
+}
+
+func (IngredientHandler) StreamIngredient(ctx context.Context, req *connect_go.Request[v1.StreamIngredientRequest], stm *connect_go.ServerStream[v1.StreamIngredientResponse]) error {
+	log.Println("Request headers: ", req.Header())
+	streams = append(streams, stm)
+	log.Println("Stream start(len(streams): ", len(streams), ")")
+	for {
+		// セッションを切らさないための無限ループ
+	}
 }
