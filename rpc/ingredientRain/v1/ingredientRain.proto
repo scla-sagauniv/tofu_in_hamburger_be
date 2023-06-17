@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package rpc.ingredientRain.v1.ingredientService;
+package rpc.ingredientRain.v1;
 
 import "google/protobuf/timestamp.proto";
 
@@ -104,7 +104,7 @@ message RecipeOnDb {
   string materials = 7;
   string material_ids = 8;
   google.protobuf.Timestamp publishday = 9;
-  int64 rank = 10;
+  int64 ranking = 10;
   int64 recipe_indication_id = 11;
   int64 recipe_cost_id = 12;
   google.protobuf.Timestamp created_at = 13;
@@ -126,11 +126,11 @@ message SearchRecipesByIngredientResponse {
 }  
 
 message CreateRecipesByBatchRequest {
-  repeated RecipeOnDb recipe = 1;
+  repeated RecipeOnDb recipes = 1;
 }
 
 message CreateRecipesByBatchResponse {
-  string error = 1;
+  optional string error = 1;
 }
 
 message UpdateRecipeRequest {
