@@ -71,7 +71,8 @@ message DeleteIngredientResponse {}
 
 service RecipeService {
   rpc GetRecipeList(GetRecipeListRequest) returns (GetRecipeListResponse) {}
-  rpc CreateRecipe(CreateRecipeRequest) returns (CreateRecipeResponse) {}
+  rpc SearchRecipesByIngredients(SearchRecipesByIngredientsRequest) returns (SearchRecipesByIngredientResponse) {}
+  rpc CreateRecipesByBatch(CreateRecipesByBatchRequest) returns (CreateRecipesByBatchResponse) {}
   rpc UpdateRecipe(UpdateRecipeRequest) returns (UpdateRecipeResponse) {}
   rpc DeleteRecipe(DeleteRecipeRequest) returns (DeleteRecipeResponse) {}
 }
@@ -113,19 +114,27 @@ message RecipeOnDb {
 message GetRecipeListRequest {}
 
 message GetRecipeListResponse {
-  repeated Recipe Recipes = 1;
+  repeated Recipe recipes = 1;
 }
 
-message CreateRecipeRequest {
-  Recipe Recipe = 1;
+message SearchRecipesByIngredientsRequest {
+  repeated Ingredient ingredients = 1;
 }
 
-message CreateRecipeResponse {
-  int64 id = 1;
+message SearchRecipesByIngredientResponse {
+  repeated Recipe recipes = 1;
+}  
+
+message CreateRecipesByBatchRequest {
+  repeated RecipeOnDb recipe = 1;
+}
+
+message CreateRecipesByBatchResponse {
+  string error = 1;
 }
 
 message UpdateRecipeRequest {
-  Recipe Recipe = 1;
+  Recipe recipe = 1;
 }
 
 message UpdateRecipeResponse {}

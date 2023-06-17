@@ -53,9 +53,12 @@ const (
 	// RecipeServiceGetRecipeListProcedure is the fully-qualified name of the RecipeService's
 	// GetRecipeList RPC.
 	RecipeServiceGetRecipeListProcedure = "/rpc.ingredientRain.v1.RecipeService/GetRecipeList"
-	// RecipeServiceCreateRecipeProcedure is the fully-qualified name of the RecipeService's
-	// CreateRecipe RPC.
-	RecipeServiceCreateRecipeProcedure = "/rpc.ingredientRain.v1.RecipeService/CreateRecipe"
+	// RecipeServiceSearchRecipesByIngredientsProcedure is the fully-qualified name of the
+	// RecipeService's SearchRecipesByIngredients RPC.
+	RecipeServiceSearchRecipesByIngredientsProcedure = "/rpc.ingredientRain.v1.RecipeService/SearchRecipesByIngredients"
+	// RecipeServiceCreateRecipesByBatchProcedure is the fully-qualified name of the RecipeService's
+	// CreateRecipesByBatch RPC.
+	RecipeServiceCreateRecipesByBatchProcedure = "/rpc.ingredientRain.v1.RecipeService/CreateRecipesByBatch"
 	// RecipeServiceUpdateRecipeProcedure is the fully-qualified name of the RecipeService's
 	// UpdateRecipe RPC.
 	RecipeServiceUpdateRecipeProcedure = "/rpc.ingredientRain.v1.RecipeService/UpdateRecipe"
@@ -216,7 +219,8 @@ func (UnimplementedIngredientServiceHandler) DeleteIngredient(context.Context, *
 // RecipeServiceClient is a client for the rpc.ingredientRain.v1.RecipeService service.
 type RecipeServiceClient interface {
 	GetRecipeList(context.Context, *connect_go.Request[v1.GetRecipeListRequest]) (*connect_go.Response[v1.GetRecipeListResponse], error)
-	CreateRecipe(context.Context, *connect_go.Request[v1.CreateRecipeRequest]) (*connect_go.Response[v1.CreateRecipeResponse], error)
+	SearchRecipesByIngredients(context.Context, *connect_go.Request[v1.SearchRecipesByIngredientsRequest]) (*connect_go.Response[v1.SearchRecipesByIngredientResponse], error)
+	CreateRecipesByBatch(context.Context, *connect_go.Request[v1.CreateRecipesByBatchRequest]) (*connect_go.Response[v1.CreateRecipesByBatchResponse], error)
 	UpdateRecipe(context.Context, *connect_go.Request[v1.UpdateRecipeRequest]) (*connect_go.Response[v1.UpdateRecipeResponse], error)
 	DeleteRecipe(context.Context, *connect_go.Request[v1.DeleteRecipeRequest]) (*connect_go.Response[v1.DeleteRecipeResponse], error)
 }
@@ -236,9 +240,14 @@ func NewRecipeServiceClient(httpClient connect_go.HTTPClient, baseURL string, op
 			baseURL+RecipeServiceGetRecipeListProcedure,
 			opts...,
 		),
-		createRecipe: connect_go.NewClient[v1.CreateRecipeRequest, v1.CreateRecipeResponse](
+		searchRecipesByIngredients: connect_go.NewClient[v1.SearchRecipesByIngredientsRequest, v1.SearchRecipesByIngredientResponse](
 			httpClient,
-			baseURL+RecipeServiceCreateRecipeProcedure,
+			baseURL+RecipeServiceSearchRecipesByIngredientsProcedure,
+			opts...,
+		),
+		createRecipesByBatch: connect_go.NewClient[v1.CreateRecipesByBatchRequest, v1.CreateRecipesByBatchResponse](
+			httpClient,
+			baseURL+RecipeServiceCreateRecipesByBatchProcedure,
 			opts...,
 		),
 		updateRecipe: connect_go.NewClient[v1.UpdateRecipeRequest, v1.UpdateRecipeResponse](
@@ -256,10 +265,11 @@ func NewRecipeServiceClient(httpClient connect_go.HTTPClient, baseURL string, op
 
 // recipeServiceClient implements RecipeServiceClient.
 type recipeServiceClient struct {
-	getRecipeList *connect_go.Client[v1.GetRecipeListRequest, v1.GetRecipeListResponse]
-	createRecipe  *connect_go.Client[v1.CreateRecipeRequest, v1.CreateRecipeResponse]
-	updateRecipe  *connect_go.Client[v1.UpdateRecipeRequest, v1.UpdateRecipeResponse]
-	deleteRecipe  *connect_go.Client[v1.DeleteRecipeRequest, v1.DeleteRecipeResponse]
+	getRecipeList              *connect_go.Client[v1.GetRecipeListRequest, v1.GetRecipeListResponse]
+	searchRecipesByIngredients *connect_go.Client[v1.SearchRecipesByIngredientsRequest, v1.SearchRecipesByIngredientResponse]
+	createRecipesByBatch       *connect_go.Client[v1.CreateRecipesByBatchRequest, v1.CreateRecipesByBatchResponse]
+	updateRecipe               *connect_go.Client[v1.UpdateRecipeRequest, v1.UpdateRecipeResponse]
+	deleteRecipe               *connect_go.Client[v1.DeleteRecipeRequest, v1.DeleteRecipeResponse]
 }
 
 // GetRecipeList calls rpc.ingredientRain.v1.RecipeService.GetRecipeList.
@@ -267,9 +277,14 @@ func (c *recipeServiceClient) GetRecipeList(ctx context.Context, req *connect_go
 	return c.getRecipeList.CallUnary(ctx, req)
 }
 
-// CreateRecipe calls rpc.ingredientRain.v1.RecipeService.CreateRecipe.
-func (c *recipeServiceClient) CreateRecipe(ctx context.Context, req *connect_go.Request[v1.CreateRecipeRequest]) (*connect_go.Response[v1.CreateRecipeResponse], error) {
-	return c.createRecipe.CallUnary(ctx, req)
+// SearchRecipesByIngredients calls rpc.ingredientRain.v1.RecipeService.SearchRecipesByIngredients.
+func (c *recipeServiceClient) SearchRecipesByIngredients(ctx context.Context, req *connect_go.Request[v1.SearchRecipesByIngredientsRequest]) (*connect_go.Response[v1.SearchRecipesByIngredientResponse], error) {
+	return c.searchRecipesByIngredients.CallUnary(ctx, req)
+}
+
+// CreateRecipesByBatch calls rpc.ingredientRain.v1.RecipeService.CreateRecipesByBatch.
+func (c *recipeServiceClient) CreateRecipesByBatch(ctx context.Context, req *connect_go.Request[v1.CreateRecipesByBatchRequest]) (*connect_go.Response[v1.CreateRecipesByBatchResponse], error) {
+	return c.createRecipesByBatch.CallUnary(ctx, req)
 }
 
 // UpdateRecipe calls rpc.ingredientRain.v1.RecipeService.UpdateRecipe.
@@ -285,7 +300,8 @@ func (c *recipeServiceClient) DeleteRecipe(ctx context.Context, req *connect_go.
 // RecipeServiceHandler is an implementation of the rpc.ingredientRain.v1.RecipeService service.
 type RecipeServiceHandler interface {
 	GetRecipeList(context.Context, *connect_go.Request[v1.GetRecipeListRequest]) (*connect_go.Response[v1.GetRecipeListResponse], error)
-	CreateRecipe(context.Context, *connect_go.Request[v1.CreateRecipeRequest]) (*connect_go.Response[v1.CreateRecipeResponse], error)
+	SearchRecipesByIngredients(context.Context, *connect_go.Request[v1.SearchRecipesByIngredientsRequest]) (*connect_go.Response[v1.SearchRecipesByIngredientResponse], error)
+	CreateRecipesByBatch(context.Context, *connect_go.Request[v1.CreateRecipesByBatchRequest]) (*connect_go.Response[v1.CreateRecipesByBatchResponse], error)
 	UpdateRecipe(context.Context, *connect_go.Request[v1.UpdateRecipeRequest]) (*connect_go.Response[v1.UpdateRecipeResponse], error)
 	DeleteRecipe(context.Context, *connect_go.Request[v1.DeleteRecipeRequest]) (*connect_go.Response[v1.DeleteRecipeResponse], error)
 }
@@ -302,9 +318,14 @@ func NewRecipeServiceHandler(svc RecipeServiceHandler, opts ...connect_go.Handle
 		svc.GetRecipeList,
 		opts...,
 	))
-	mux.Handle(RecipeServiceCreateRecipeProcedure, connect_go.NewUnaryHandler(
-		RecipeServiceCreateRecipeProcedure,
-		svc.CreateRecipe,
+	mux.Handle(RecipeServiceSearchRecipesByIngredientsProcedure, connect_go.NewUnaryHandler(
+		RecipeServiceSearchRecipesByIngredientsProcedure,
+		svc.SearchRecipesByIngredients,
+		opts...,
+	))
+	mux.Handle(RecipeServiceCreateRecipesByBatchProcedure, connect_go.NewUnaryHandler(
+		RecipeServiceCreateRecipesByBatchProcedure,
+		svc.CreateRecipesByBatch,
 		opts...,
 	))
 	mux.Handle(RecipeServiceUpdateRecipeProcedure, connect_go.NewUnaryHandler(
@@ -327,8 +348,12 @@ func (UnimplementedRecipeServiceHandler) GetRecipeList(context.Context, *connect
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("rpc.ingredientRain.v1.RecipeService.GetRecipeList is not implemented"))
 }
 
-func (UnimplementedRecipeServiceHandler) CreateRecipe(context.Context, *connect_go.Request[v1.CreateRecipeRequest]) (*connect_go.Response[v1.CreateRecipeResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("rpc.ingredientRain.v1.RecipeService.CreateRecipe is not implemented"))
+func (UnimplementedRecipeServiceHandler) SearchRecipesByIngredients(context.Context, *connect_go.Request[v1.SearchRecipesByIngredientsRequest]) (*connect_go.Response[v1.SearchRecipesByIngredientResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("rpc.ingredientRain.v1.RecipeService.SearchRecipesByIngredients is not implemented"))
+}
+
+func (UnimplementedRecipeServiceHandler) CreateRecipesByBatch(context.Context, *connect_go.Request[v1.CreateRecipesByBatchRequest]) (*connect_go.Response[v1.CreateRecipesByBatchResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("rpc.ingredientRain.v1.RecipeService.CreateRecipesByBatch is not implemented"))
 }
 
 func (UnimplementedRecipeServiceHandler) UpdateRecipe(context.Context, *connect_go.Request[v1.UpdateRecipeRequest]) (*connect_go.Response[v1.UpdateRecipeResponse], error) {
