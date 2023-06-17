@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -13,7 +14,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/", handler)
 	log.Println("launching server")
-	e := http.ListenAndServe(":8080", nil)
+	port, _ := ":", os.Getenv("SERVER_PORT")
+	e := http.ListenAndServe(port, nil)
 	if e != nil {
 		log.Fatal("server launche error \n", e)
 	}
