@@ -4,15 +4,13 @@ name: Trigger auto deployment for ca-tofu-in-hamburger-be
 on:
   # Automatically trigger it when detected changes in repo
   push:
-    branches: 
-      [ main ]
+    branches: [main]
     paths:
-    - 'docker/server/Dockerfile.prod/**'
-    - '.github/workflows/ca-tofu-in-hamburger-be-AutoDeployTrigger-fe4df841-9fc0-47b7-8540-611c19b35569.yml'
+      - ".github/workflows/ca-tofu-in-hamburger-be-AutoDeployTrigger-fe4df841-9fc0-47b7-8540-611c19b35569.yml"
 
-  # Allow mannually trigger 
+  # Allow mannually trigger
   workflow_dispatch:
-      
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -29,14 +27,11 @@ jobs:
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v1
         with:
-          appSourcePath: ${{ github.workspace }}docker/server/Dockerfile.prod 
+          appSourcePath: ${{ github.workspace }}docker/server/Dockerfile.prod
           registryUrl: crtofuinhamburger.azurecr.io
           registryUsername: ${{ secrets.CATOFUINHAMBURGERBE_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.CATOFUINHAMBURGERBE_REGISTRY_PASSWORD }}
           containerAppName: ca-tofu-in-hamburger-be
           resourceGroup: rg-tofuinhamburg
           imageToBuild: crtofuinhamburger.azurecr.io/ca-tofu-in-hamburger-be:${{ github.sha }}
-          dockerfilePath: Dockerfile
-
-     
-
+          dockerfilePath: docker/server/Dockerfile.prod
