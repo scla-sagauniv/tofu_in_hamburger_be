@@ -41,6 +41,9 @@ const (
 	// IngredientServiceGetIngredientListProcedure is the fully-qualified name of the
 	// IngredientService's GetIngredientList RPC.
 	IngredientServiceGetIngredientListProcedure = "/rpc.ingredientRain.v1.IngredientService/GetIngredientList"
+	// IngredientServiceSendIngredientsProcedure is the fully-qualified name of the IngredientService's
+	// SendIngredients RPC.
+	IngredientServiceSendIngredientsProcedure = "/rpc.ingredientRain.v1.IngredientService/SendIngredients"
 	// IngredientServiceCreateIngredientProcedure is the fully-qualified name of the IngredientService's
 	// CreateIngredient RPC.
 	IngredientServiceCreateIngredientProcedure = "/rpc.ingredientRain.v1.IngredientService/CreateIngredient"
@@ -71,6 +74,7 @@ const (
 type IngredientServiceClient interface {
 	StreamIngredient(context.Context, *connect_go.Request[v1.StreamIngredientRequest]) (*connect_go.ServerStreamForClient[v1.StreamIngredientResponse], error)
 	GetIngredientList(context.Context, *connect_go.Request[v1.GetIngredientListRequest]) (*connect_go.Response[v1.GetIngredientListResponse], error)
+	SendIngredients(context.Context, *connect_go.Request[v1.SendIngredientsRequst]) (*connect_go.Response[v1.SendIngredientsResponse], error)
 	CreateIngredient(context.Context, *connect_go.Request[v1.CreateIngredientRequest]) (*connect_go.Response[v1.CreateIngredientResponse], error)
 	UpdateIngredient(context.Context, *connect_go.Request[v1.UpdateIngredientRequest]) (*connect_go.Response[v1.UpdateIngredientResponse], error)
 	DeleteIngredient(context.Context, *connect_go.Request[v1.DeleteIngredientRequest]) (*connect_go.Response[v1.DeleteIngredientResponse], error)
@@ -96,6 +100,11 @@ func NewIngredientServiceClient(httpClient connect_go.HTTPClient, baseURL string
 			baseURL+IngredientServiceGetIngredientListProcedure,
 			opts...,
 		),
+		sendIngredients: connect_go.NewClient[v1.SendIngredientsRequst, v1.SendIngredientsResponse](
+			httpClient,
+			baseURL+IngredientServiceSendIngredientsProcedure,
+			opts...,
+		),
 		createIngredient: connect_go.NewClient[v1.CreateIngredientRequest, v1.CreateIngredientResponse](
 			httpClient,
 			baseURL+IngredientServiceCreateIngredientProcedure,
@@ -118,6 +127,7 @@ func NewIngredientServiceClient(httpClient connect_go.HTTPClient, baseURL string
 type ingredientServiceClient struct {
 	streamIngredient  *connect_go.Client[v1.StreamIngredientRequest, v1.StreamIngredientResponse]
 	getIngredientList *connect_go.Client[v1.GetIngredientListRequest, v1.GetIngredientListResponse]
+	sendIngredients   *connect_go.Client[v1.SendIngredientsRequst, v1.SendIngredientsResponse]
 	createIngredient  *connect_go.Client[v1.CreateIngredientRequest, v1.CreateIngredientResponse]
 	updateIngredient  *connect_go.Client[v1.UpdateIngredientRequest, v1.UpdateIngredientResponse]
 	deleteIngredient  *connect_go.Client[v1.DeleteIngredientRequest, v1.DeleteIngredientResponse]
@@ -131,6 +141,11 @@ func (c *ingredientServiceClient) StreamIngredient(ctx context.Context, req *con
 // GetIngredientList calls rpc.ingredientRain.v1.IngredientService.GetIngredientList.
 func (c *ingredientServiceClient) GetIngredientList(ctx context.Context, req *connect_go.Request[v1.GetIngredientListRequest]) (*connect_go.Response[v1.GetIngredientListResponse], error) {
 	return c.getIngredientList.CallUnary(ctx, req)
+}
+
+// SendIngredients calls rpc.ingredientRain.v1.IngredientService.SendIngredients.
+func (c *ingredientServiceClient) SendIngredients(ctx context.Context, req *connect_go.Request[v1.SendIngredientsRequst]) (*connect_go.Response[v1.SendIngredientsResponse], error) {
+	return c.sendIngredients.CallUnary(ctx, req)
 }
 
 // CreateIngredient calls rpc.ingredientRain.v1.IngredientService.CreateIngredient.
@@ -153,6 +168,7 @@ func (c *ingredientServiceClient) DeleteIngredient(ctx context.Context, req *con
 type IngredientServiceHandler interface {
 	StreamIngredient(context.Context, *connect_go.Request[v1.StreamIngredientRequest], *connect_go.ServerStream[v1.StreamIngredientResponse]) error
 	GetIngredientList(context.Context, *connect_go.Request[v1.GetIngredientListRequest]) (*connect_go.Response[v1.GetIngredientListResponse], error)
+	SendIngredients(context.Context, *connect_go.Request[v1.SendIngredientsRequst]) (*connect_go.Response[v1.SendIngredientsResponse], error)
 	CreateIngredient(context.Context, *connect_go.Request[v1.CreateIngredientRequest]) (*connect_go.Response[v1.CreateIngredientResponse], error)
 	UpdateIngredient(context.Context, *connect_go.Request[v1.UpdateIngredientRequest]) (*connect_go.Response[v1.UpdateIngredientResponse], error)
 	DeleteIngredient(context.Context, *connect_go.Request[v1.DeleteIngredientRequest]) (*connect_go.Response[v1.DeleteIngredientResponse], error)
@@ -173,6 +189,11 @@ func NewIngredientServiceHandler(svc IngredientServiceHandler, opts ...connect_g
 	mux.Handle(IngredientServiceGetIngredientListProcedure, connect_go.NewUnaryHandler(
 		IngredientServiceGetIngredientListProcedure,
 		svc.GetIngredientList,
+		opts...,
+	))
+	mux.Handle(IngredientServiceSendIngredientsProcedure, connect_go.NewUnaryHandler(
+		IngredientServiceSendIngredientsProcedure,
+		svc.SendIngredients,
 		opts...,
 	))
 	mux.Handle(IngredientServiceCreateIngredientProcedure, connect_go.NewUnaryHandler(
@@ -202,6 +223,10 @@ func (UnimplementedIngredientServiceHandler) StreamIngredient(context.Context, *
 
 func (UnimplementedIngredientServiceHandler) GetIngredientList(context.Context, *connect_go.Request[v1.GetIngredientListRequest]) (*connect_go.Response[v1.GetIngredientListResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("rpc.ingredientRain.v1.IngredientService.GetIngredientList is not implemented"))
+}
+
+func (UnimplementedIngredientServiceHandler) SendIngredients(context.Context, *connect_go.Request[v1.SendIngredientsRequst]) (*connect_go.Response[v1.SendIngredientsResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("rpc.ingredientRain.v1.IngredientService.SendIngredients is not implemented"))
 }
 
 func (UnimplementedIngredientServiceHandler) CreateIngredient(context.Context, *connect_go.Request[v1.CreateIngredientRequest]) (*connect_go.Response[v1.CreateIngredientResponse], error) {

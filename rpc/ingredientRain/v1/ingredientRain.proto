@@ -9,6 +9,7 @@ option go_package = "tofu_in_hamburger_be/gen/rpc/ingredientRain/v1;ingredientRa
 service IngredientService {
   rpc StreamIngredient(StreamIngredientRequest) returns (stream StreamIngredientResponse) {}
   rpc GetIngredientList(GetIngredientListRequest) returns (GetIngredientListResponse) {}
+  rpc SendIngredients(SendIngredientsRequst) returns (SendIngredientsResponse) {}
   rpc CreateIngredient(CreateIngredientRequest) returns (CreateIngredientResponse) {}
   rpc UpdateIngredient(UpdateIngredientRequest) returns (UpdateIngredientResponse) {}
   rpc DeleteIngredient(DeleteIngredientRequest) returns (DeleteIngredientResponse) {}
@@ -16,12 +17,12 @@ service IngredientService {
 
 message Ingredient {
   int64 id = 1;
+  string uuid = 7;
   string titile = 2;
   string description = 3;
   string image_url = 4;
   google.protobuf.Timestamp created_at = 5;
   google.protobuf.Timestamp updated_at = 6;
-  string uuid = 7;
 }
 
 message IngredientOnDb {
@@ -44,6 +45,12 @@ message GetIngredientListRequest {}
 message GetIngredientListResponse {
   repeated Ingredient ingredients = 1;
 }
+
+message SendIngredientsRequst {
+  repeated Ingredient ingredients = 1;
+}
+
+message SendIngredientsResponse {}
 
 message CreateIngredientRequest {
   Ingredient ingredient = 1;
