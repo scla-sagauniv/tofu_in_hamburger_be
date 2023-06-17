@@ -16,3 +16,29 @@ VALUES (0, '指定なし'),
   (6, '3,000円前後'),
   (7, '5,000円前後'),
   (8, '10,000円以上');
+INSERT INTO materials (title, description, image_url)
+VALUES (
+    'Ingredient 1',
+    'Description 1',
+    'image1.jpg'
+  ),
+  (
+    'Ingredient 2',
+    'Description 2',
+    'image2.jpg'
+  ),
+  (
+    'Ingredient 3',
+    'Description 3',
+    'image3.jpg'
+  ),
+  (
+    'Ingredient 4',
+    'Description 4',
+    'image4.jpg'
+  ),
+  (
+    'Ingredient 5',
+    'Description 5',
+    'image5.jpg'
+  );
