@@ -4,7 +4,7 @@ package rpc.ingredientRain.v1;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "htofu_in_hamburger_be/gen/rpc/ingredientRain/v1;ingredientRainv1";
+option go_package = "tofu_in_hamburger_be/gen/rpc/ingredientRain/v1;ingredientRainv1";
 
 service IngredientService {
   rpc StreamIngredient(StreamIngredientRequest) returns (stream StreamIngredientResponse) {}

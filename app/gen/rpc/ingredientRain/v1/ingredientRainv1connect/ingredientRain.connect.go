@@ -8,9 +8,9 @@ import (
 	context "context"
 	errors "errors"
 	connect_go "github.com/bufbuild/connect-go"
-	v1 "htofu_in_hamburger_be/gen/rpc/ingredientRain/v1"
 	http "net/http"
 	strings "strings"
+	v1 "tofu_in_hamburger_be/gen/rpc/ingredientRain/v1"
 )
 
 // This is a compile-time assertion to ensure that this generated file and the connect package are
