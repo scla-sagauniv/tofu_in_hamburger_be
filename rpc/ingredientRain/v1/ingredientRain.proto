@@ -43,7 +43,7 @@ message StreamIngredientResponse {
 message GetIngredientListRequest {}
 
 message GetIngredientListResponse {
-  repeated Ingredient ingredients = 1;
+  repeated IngredientOnDb ingredients = 1;
 }
 
 message SendIngredientsRequst {
