@@ -8,7 +8,7 @@ import (
 func DeleteAllRecipe() error {
 	log.Println("Start DeleteAllRecipe")
 
-	query := "delete from recipes;"
+	query := "delete from recipes"
 	log.Println("--- delete all rows query ---")
 	log.Println(query)
 	log.Println("-------------------------")

@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"tofu_in_hamburger_be/db"
 
-	_ "github.com/go-sql-driver/mysql"
+	// _ "github.com/go-sql-driver/mysql"
+	_ "github.com/microsoft/go-mssqldb"
 
 	"tofu_in_hamburger_be/gen/rpc/ingredientRain/v1/ingredientRainv1connect"
 	myHandler "tofu_in_hamburger_be/handler"
