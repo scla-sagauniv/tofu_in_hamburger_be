@@ -43,7 +43,7 @@ func (RecipeHandler) CreateRecipesByBatch(ctx context.Context, req *connect_go.R
 	return res, nil
 }
 
-func SearchRecipesByIngredients(ctx context.Context, req *connect_go.Request[v1.SearchRecipesByIngredientsRequest]) (*connect_go.Response[v1.SearchRecipesByIngredientResponse], error) {
+func (RecipeHandler) SearchRecipesByIngredients(ctx context.Context, req *connect_go.Request[v1.SearchRecipesByIngredientsRequest]) (*connect_go.Response[v1.SearchRecipesByIngredientResponse], error) {
 	log.Println("Request headers: ", req.Header())
 	recipes, err := logic.SelectRecipe(req.Msg.Ingredients)
 	if err != nil {
