@@ -57,7 +57,7 @@ func convertToRecipeCostId(recipeCostId int64) string {
 func SelectRecipe(ingredients []*v1.Ingredient) ([]*v1.Recipe, error) {
 	log.Println("Start SelectRecipe")
 
-	query := "select from recipes"
+	query := "select * from recipes order by ranking"
 	log.Println("--- select all recipe query ---")
 	log.Println(query)
 	log.Println("-------------------------")
@@ -74,7 +74,22 @@ func SelectRecipe(ingredients []*v1.Ingredient) ([]*v1.Recipe, error) {
 		var publishday time.Time
 		var createdAt time.Time
 		var updatedAt time.Time
-		err := rows.Scan(&recipe.Id, &recipe.Title, &recipe.RecipeUrl, &recipe.ImageUrl, &recipe.Pickup, &recipe.Nickname, &recipe.Materials, &recipe.MaterialIds, &publishday, &recipe.Ranking, &recipe.RecipeIndicationId, &recipe.RecipeCostId, &createdAt, &updatedAt)
+		err := rows.Scan(
+			&recipe.Id,
+			&recipe.Title,
+			&recipe.RecipeUrl,
+			&recipe.ImageUrl,
+			&recipe.Pickup,
+			&recipe.Nickname,
+			&recipe.Materials,
+			&recipe.MaterialIds,
+			&publishday,
+			&recipe.Ranking,
+			&recipe.RecipeIndicationId,
+			&recipe.RecipeCostId,
+			&createdAt,
+			&updatedAt,
+		)
 		if err != nil {
 			log.Fatal(err)
 			return nil, err
@@ -94,24 +109,28 @@ func SelectRecipe(ingredients []*v1.Ingredient) ([]*v1.Recipe, error) {
 			}
 		}
 		if !f {
-			var r *v1.Recipe
-			r.Id = recipe.GetId()
-			r.Title = recipe.GetTitle()
-			r.RecipeUrl = recipe.GetRecipeUrl()
-			r.ImageUrl = recipe.GetImageUrl()
-			r.Pickup = recipe.GetPickup()
-			r.Nickname = recipe.GetNickname()
-			r.Materials = recipe.GetMaterials()
-			r.MaterialIds = []int64{0}
-			r.Publishday = recipe.GetPublishday()
-			r.Rank = recipe.GetRanking()
-			r.RecipeIndication = convertToRecipeIndicationId(recipe.GetRecipeIndicationId())
-			r.RecipeCost = convertToRecipeCostId(recipe.GetRecipeCostId())
-			r.CreatedAt = recipe.GetCreatedAt()
-			r.UpdatedAt = recipe.GetUpdatedAt()
-			resultRecipes = append(resultRecipes, r)
+			r := v1.Recipe{
+				Id:               recipe.GetId(),
+				Title:            recipe.GetTitle(),
+				RecipeUrl:        recipe.GetRecipeUrl(),
+				ImageUrl:         recipe.GetImageUrl(),
+				Pickup:           recipe.GetPickup(),
+				Nickname:         recipe.GetNickname(),
+				Materials:        recipe.GetMaterials(),
+				MaterialIds:      []int64{0},
+				Publishday:       recipe.GetPublishday(),
+				Rank:             recipe.GetRanking(),
+				RecipeIndication: convertToRecipeIndicationId(recipe.GetRecipeIndicationId()),
+				RecipeCost:       convertToRecipeCostId(recipe.GetRecipeCostId()),
+				CreatedAt:        recipe.GetCreatedAt(),
+				UpdatedAt:        recipe.GetUpdatedAt(),
+			}
+			resultRecipes = append(resultRecipes, &r)
 		}
 		f = false
+		if len(resultRecipes) > 5 {
+			break
+		}
 	}
 	return resultRecipes, nil
 }
